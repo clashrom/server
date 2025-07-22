@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Classroom</title>
   <link rel="icon" href="https://ssl.gstatic.com/classroom/ic_product_classroom_96.png" />
-
-  <!-- Fuente pixelada tipo Minecraft -->
   <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
 
   <style>
@@ -33,29 +31,27 @@
     }
 
     .button {
-    padding: 20px 40px;
-    font-size: 20px;
-    margin: 15px;
-    background-image: url('images/grass.png');
-    background-size: cover;
-    color: white;
-    border: 4px solid #3c3c3c;
-    border-radius: 12px;
-    cursor: pointer;
-    text-shadow: 1px 1px #000;
-    transition: transform 0.2s ease, filter 0.2s ease;
-    font-family: 'Minecraftia', sans-serif;
-    font-smooth: never;
-    -webkit-font-smoothing: none;
-  }
-
+      padding: 20px 40px;
+      font-size: 20px;
+      margin: 15px;
+      background-image: url('images/grass.png');
+      background-size: cover;
+      color: white;
+      border: 4px solid #3c3c3c;
+      border-radius: 12px;
+      cursor: pointer;
+      text-shadow: 1px 1px #000;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      font-family: 'Minecraftia', sans-serif;
+      font-smooth: never;
+      -webkit-font-smoothing: none;
+    }
 
     .button:hover {
       transform: scale(1.05);
       filter: brightness(1.1);
     }
 
-    /* Animaciones */
     #animation-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -116,38 +112,52 @@
 <body>
   <img src="images/minecraft_title.png" alt="Minecraft Title" class="title" id="mainTitle">
 
-  <button class="button" onclick="location.href='tutorial.html'">Tutorial para unirse al server</button>
+  <button class="button" onclick="abrirTutorial()">Tutorial para unirse al server</button>
   <button class="button" onclick="startAnimation()">Unirse</button>
 
-  <!-- Overlay para animaciones -->
   <div id="animation-overlay">
     <img src="images/minecraft_title.png" id="logo1" class="fade-in zoom-slow">
     <img src="images/merks.png" id="logo2" class="hidden">
   </div>
 
   <script>
+    function abrirTutorial() {
+      const nuevaPestana = window.open("about:blank", "_blank");
+      const contenido = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Tutorial</title>
+            <style>body, html { margin: 0; padding: 0; height: 100%; }</style>
+          </head>
+          <body>
+            <iframe src="tutorial.html" style="border: none; width: 100vw; height: 100vh;"></iframe>
+          </body>
+        </html>
+      `;
+      nuevaPestana.document.open();
+      nuevaPestana.document.write(contenido);
+      nuevaPestana.document.close();
+    }
+
     function startAnimation() {
       document.querySelectorAll('.button, #mainTitle').forEach(el => el.style.display = 'none');
-
       const overlay = document.getElementById("animation-overlay");
       const logo1 = document.getElementById("logo1");
       const logo2 = document.getElementById("logo2");
 
       overlay.style.display = "flex";
 
-      // Paso 1: mostrar logo1 con animación
       setTimeout(() => {
         logo1.classList.add("fade-out");
       }, 9000);
 
-      // Paso 2: ocultar logo1 y mostrar logo2 con animación grande
       setTimeout(() => {
         logo1.style.display = "none";
         logo2.classList.remove("hidden");
         logo2.classList.add("fade-in", "zoom-big");
       }, 7000);
 
-      // Paso 3: ir al juego
       setTimeout(() => {
         window.location.href = "juego.html";
       }, 9900);
