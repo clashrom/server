@@ -12,12 +12,30 @@
       color: #f0f0f0;
       padding: 30px;
       line-height: 1.6;
+      text-align: center;
     }
-    a {
-      color: #4CAF50;
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    p {
+      margin: 10px 0;
+    }
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      margin: 10px auto;
+      display: block;
+      background-color: #1e1e1e;
+      color: #00ff00;
+      text-align: center;
     }
     button {
-      margin-top: 30px;
+      margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
       background-color: #4CAF50;
@@ -25,20 +43,36 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
   <h1>Cómo unirse al servidor</h1>
-  <p>1. Entra a la página del juego con el botón "Unirse" de la página anterior.</p>
-  <p>2. Elige un nombre de usuario. No uses tu nombre real.</p>
-  <p>3. Pulsa "Multiplayer" y luego "Direct Connect".</p>
-  <p>4. Introduce la IP de tu servidor (pregunta al profe o admin).</p>
-  <p>5. ¡Disfruta!</p>
+  <p>1. Entra a la página del juego con el botón <strong>Unirse</strong> de la página principal.</p>
+  <p>2. Escribe un nombre de usuario (no pongas tu nombre real).</p>
+  <p>3. Haz clic en <strong>Multiplayer</strong> y luego en <strong>Direct Connect</strong>.</p>
+  <p>4. Introduce esta IP del servidor:</p>
+
+  <input type="text" id="serverIp" value="mc.servidor-escolar.net" readonly onclick="this.select()">
+  <button onclick="copyIp()">Copiar IP</button>
+
+  <p>5. Pulsa en <strong>Join Server</strong> y ¡a jugar! 🎮</p>
 
   <button onclick="location.href='index.html'">Volver al inicio</button>
 
   <script>
+    function copyIp() {
+      const ipInput = document.getElementById("serverIp");
+      ipInput.select();
+      ipInput.setSelectionRange(0, 99999); // iOS support
+      document.execCommand("copy");
+      alert("IP copiada al portapapeles 📋");
+    }
+
     document.addEventListener("keydown", function(e) {
       if (e.key === "º") {
         window.location.href = "https://classroom.google.com/";
