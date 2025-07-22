@@ -1,115 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Classroom</title>
-  <link rel="icon" href="https://ssl.gstatic.com/classroom/favicon.png">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+  <link rel="icon" href="https://ssl.gstatic.com/classroom/ic_product_classroom_96.png" />
 
-    * {
+  <!-- Fuente pixelada tipo Minecraft -->
+  <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+
+  <style>
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: 'Jersey 10', sans-serif;
-    }
-
-    body {
-      background: url("https://static.planetminecraft.com/files/image/minecraft/texture-pack/2024/308/17576286_xl.webp") no-repeat center center fixed;
+      background-image: url('https://static.planetminecraft.com/files/image/minecraft/texture-pack/2024/308/17576286_xl.webp');
       background-size: cover;
-      height: 100vh;
-      overflow: hidden;
+      background-position: center;
+      font-family: 'Minecraftia', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
     }
 
-    #main-title {
-      position: absolute;
-      top: 10%;
-      width: 600px;
-      transition: all 5s ease;
+    img.title {
+      width: 90%;
+      max-width: 500px;
+      margin-bottom: 40px;
     }
 
     .button {
-      font-size: 30px;
       padding: 20px 40px;
-      margin: 20px;
-      background-image: url("https://static.planetminecraft.com/files/resource_media/screenshot/1340/grass-256x256_8715101.jpg");
+      font-size: 20px;
+      margin: 15px;
+      background-image: url('images/grass.png');
       background-size: cover;
-      border: 4px solid #2e7d32;
       color: white;
-      text-shadow: 2px 2px #000;
+      border: 4px solid #3c3c3c;
+      border-radius: 12px;
       cursor: pointer;
-      transition: transform 0.3s;
+      text-shadow: 1px 1px #000;
+      transition: transform 0.2s ease, filter 0.2s ease;
     }
 
     .button:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
+      filter: brightness(1.1);
     }
 
-    #merks {
+    /* Animaciones */
+    #animation-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(2px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .fade-in {
       opacity: 0;
-      position: absolute;
-      width: 0;
-      transition: all 6s ease;
+      animation: fadeIn 2s forwards;
     }
 
-    .centered {
-      top: 50% !important;
-      left: 50% !important;
-      transform: translate(-50%, -50%) scale(1.5);
+    .fade-out {
+      animation: fadeOut 2s forwards;
     }
 
-    .fadeOut {
-      opacity: 0;
-      transition: opacity 4s ease;
+    .zoom-slow {
+      animation: zoomInSlow 3s forwards;
     }
 
-    .fadeIn {
-      opacity: 1 !important;
-      width: 600px !important;
-      transition: opacity 4s ease, width 6s ease;
+    .zoom-big {
+      animation: zoomBig 3s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+
+    @keyframes zoomInSlow {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes zoomBig {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1.5); opacity: 1; }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #logo1, #logo2 {
+      max-width: 90%;
     }
   </style>
 </head>
 <body>
-  <img id="main-title" src="images/minecraft_title.png">
-  <img id="merks" src="images/merks.png">
+  <img src="images/minecraft_title.png" alt="Minecraft Title" class="title" id="mainTitle">
 
-  <button class="button" onclick="window.location.href='tutorial.html'">Tutorial para unirse al server</button>
-  <button class="button" onclick="startSequence()">Unirse</button>
+  <button class="button" onclick="location.href='tutorial.html'">Tutorial para unirse al server</button>
+  <button class="button" onclick="startAnimation()">Unirse</button>
+
+  <!-- Overlay para animaciones -->
+  <div id="animation-overlay">
+    <img src="images/minecraft_title.png" id="logo1" class="fade-in zoom-slow">
+    <img src="images/merks.png" id="logo2" class="hidden">
+  </div>
 
   <script>
-    document.addEventListener("keydown", e => {
+    function startAnimation() {
+      document.querySelectorAll('.button, #mainTitle').forEach(el => el.style.display = 'none');
+
+      const overlay = document.getElementById("animation-overlay");
+      const logo1 = document.getElementById("logo1");
+      const logo2 = document.getElementById("logo2");
+
+      overlay.style.display = "flex";
+
+      // Paso 1: mostrar logo1 con animación
+      setTimeout(() => {
+        logo1.classList.add("fade-out");
+      }, 9000);
+
+      // Paso 2: ocultar logo1 y mostrar logo2 con animación grande
+      setTimeout(() => {
+        logo1.style.display = "none";
+        logo2.classList.remove("hidden");
+        logo2.classList.add("fade-in", "zoom-big");
+      }, 10000);
+
+      // Paso 3: ir al juego
+      setTimeout(() => {
+        window.location.href = "juego.html";
+      }, 8500);
+    }
+
+    document.addEventListener("keydown", function(e) {
       if (e.key === "º") {
         window.location.href = "https://classroom.google.com/";
       }
     });
-
-    function startSequence() {
-      const title = document.getElementById("main-title");
-      const merks = document.getElementById("merks");
-
-      // Paso 1: mover al centro y agrandar
-      title.classList.add("centered");
-
-      // Paso 2: fade out después de 6s
-      setTimeout(() => {
-        title.classList.add("fadeOut");
-      }, 6000);
-
-      // Paso 3: mostrar merks con fadeIn y scale
-      setTimeout(() => {
-        merks.classList.add("fadeIn");
-      }, 11000);
-
-      // Paso 4: redirigir
-      setTimeout(() => {
-        window.location.href = "juego.html";
-      }, 19000);
-    }
   </script>
 </body>
 </html>
