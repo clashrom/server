@@ -101,7 +101,7 @@
 
     @keyframes zoomBig {
       from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1.5); opacity: 1; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .hidden {
@@ -145,7 +145,7 @@
         logo1.style.display = "none";
         logo2.classList.remove("hidden");
         logo2.classList.add("fade-in", "zoom-big");
-      }, 9000);
+      }, 3000);
 
       // Paso 3: ir al juego
       setTimeout(() => {
