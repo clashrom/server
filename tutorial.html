@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classroom</title>
+  <link rel="icon" href="https://ssl.gstatic.com/classroom/ic_product_classroom_96.png" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0e0e0e;
+      color: #f0f0f0;
+      padding: 30px;
+      line-height: 1.6;
+    }
+    a {
+      color: #4CAF50;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cómo unirse al servidor</h1>
+  <p>1. Entra a la página del juego con el botón "Unirse" de la página anterior.</p>
+  <p>2. Elige un nombre de usuario. No uses tu nombre real.</p>
+  <p>3. Pulsa "Multiplayer" y luego "Direct Connect".</p>
+  <p>4. Introduce la IP de tu servidor (pregunta al profe o admin).</p>
+  <p>5. ¡Disfruta!</p>
+
+  <button onclick="location.href='index.html'">Volver al inicio</button>
+
+  <script>
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "º") {
+        window.location.href = "https://classroom.google.com/";
+      }
+    });
+  </script>
+</body>
+</html>
