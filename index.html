@@ -142,24 +142,28 @@
 
     function startAnimation() {
       document.querySelectorAll('.button, #mainTitle').forEach(el => el.style.display = 'none');
+
       const overlay = document.getElementById("animation-overlay");
       const logo1 = document.getElementById("logo1");
       const logo2 = document.getElementById("logo2");
 
       overlay.style.display = "flex";
 
+      // Paso 1: mostrar logo1 con animación
       setTimeout(() => {
         logo1.classList.add("fade-out");
       }, 9000);
 
+      // Paso 2: ocultar logo1 y mostrar logo2 con animación grande
       setTimeout(() => {
         logo1.style.display = "none";
         logo2.classList.remove("hidden");
         logo2.classList.add("fade-in", "zoom-big");
       }, 7000);
 
+      // Paso 3: abrir el juego en una nueva pestaña
       setTimeout(() => {
-        window.location.href = "juego.html";
+        window.open("juego.html", "_blank");
       }, 9900);
     }
 
