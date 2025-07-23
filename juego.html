@@ -33,32 +33,43 @@
       object-fit: cover;
     }
 
-    #overlayToggle {
+    #keyListenerOverlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: 9998;
-      pointer-events: none; /* deja pasar clics y teclas al iframe */
+      background: transparent;
+      pointer-events: auto;
     }
   </style>
 </head>
 <body>
 
-  <div id="overlayToggle"></div>
+  <!-- Imagen falsa -->
   <img id="fakeImage" src="images/Screenshot.jpg" alt="Pantalla falsa">
 
+  <!-- Iframe del juego -->
   <iframe src="https://eaglercraft.q13x.com/1.8-wasm/?retina=true" allowfullscreen></iframe>
 
+  <!-- Overlay transparente que captura las teclas -->
+  <div id="keyListenerOverlay" tabindex="0"></div>
+
   <script>
+    const overlay = document.getElementById("keyListenerOverlay");
+    const fakeImage = document.getElementById("fakeImage");
     let visible = false;
 
-    window.addEventListener('keydown', function(e) {
-      if (e.key === 'Tab') {
+    overlay.focus(); // enfoca la capa transparente al cargar
+
+    window.addEventListener('click', () => overlay.focus()); // volver a enfocar al hacer clic
+
+    overlay.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
         e.preventDefault();
         visible = !visible;
-        document.getElementById("fakeImage").style.display = visible ? "block" : "none";
+        fakeImage.style.display = visible ? "block" : "none";
       }
     });
   </script>
