@@ -67,7 +67,11 @@
       visible = !visible;
       fakeImage.style.display = visible ? "block" : "none";
     });
+    
+    fakeImage.addEventListener("click", () => {
+    fakeImage.style.display = "none";
+    visible = false;
+  });
   </script>
-
 </body>
 </html>
