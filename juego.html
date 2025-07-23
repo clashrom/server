@@ -33,44 +33,39 @@
       object-fit: cover;
     }
 
-    #keyListenerOverlay {
+    #triggerButton {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 10px;
+      left: 10px;
+      width: 40px;
+      height: 40px;
+      opacity: 0; /* invisible */
       z-index: 9998;
       background: transparent;
-      pointer-events: auto;
+      border: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <!-- Imagen falsa -->
+  <!-- Imagen de pantalla falsa -->
   <img id="fakeImage" src="images/Screenshot.jpg" alt="Pantalla falsa">
 
   <!-- Iframe del juego -->
   <iframe src="https://eaglercraft.q13x.com/1.8-wasm/?retina=true" allowfullscreen></iframe>
 
-  <!-- Overlay transparente que captura las teclas -->
-  <div id="keyListenerOverlay" tabindex="0"></div>
+  <!-- Botón invisible para mostrar/ocultar imagen -->
+  <button id="triggerButton" title="Modo tarea"></button>
 
   <script>
-    const overlay = document.getElementById("keyListenerOverlay");
     const fakeImage = document.getElementById("fakeImage");
+    const trigger = document.getElementById("triggerButton");
     let visible = false;
 
-    overlay.focus(); // enfoca la capa transparente al cargar
-
-    window.addEventListener('click', () => overlay.focus()); // volver a enfocar al hacer clic
-
-    overlay.addEventListener("keydown", (e) => {
-      if (e.key === "Tab") {
-        e.preventDefault();
-        visible = !visible;
-        fakeImage.style.display = visible ? "block" : "none";
-      }
+    trigger.addEventListener("click", () => {
+      visible = !visible;
+      fakeImage.style.display = visible ? "block" : "none";
     });
   </script>
 
