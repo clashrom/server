@@ -8,10 +8,10 @@
     body {
       margin: 0;
       font-family: 'Minecraftia', sans-serif;
-      background: url('https://wallpapercave.com/wp/wp2555440.png') center/cover no-repeat;
+      background: url('https://www.xtrafondos.com/wallpapers/naturaleza-de-mapa-clasico-de-minecraft-13260.jpg') center/cover no-repeat;
       color: white;
       text-align: center;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     header {
@@ -19,7 +19,7 @@
     }
 
     header img {
-      width: 100px;
+      width: 200px;
     }
 
     h1 {
@@ -29,6 +29,10 @@
 
     .buttons {
       margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
     }
 
     /* ---- BOTONES ---- */
@@ -53,7 +57,7 @@
       text-decoration: none;
       font-weight: 900;
       transition: all 0.7s cubic-bezier(0,.8,.26,.99);
-      margin: 10px;
+      width: 250px;
     }
 
     button:before {
@@ -94,22 +98,68 @@
     /* ---- LOADER ---- */
     .loader {
       display: none;
-      margin-top: 50px;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .loadingspinner {
+      --square: 40px;
+      --offset: 45px;
+      width: calc( 3 * var(--offset) + var(--square));
+      height: calc( 2 * var(--offset) + var(--square));
+      position: relative;
     }
     .loadingspinner div {
       background: url('https://filterforge.com/filters/11635.jpg') center/cover;
+      border-radius: 4px;
+      width: var(--square);
+      height: var(--square);
+      position: absolute;
     }
 
-    /* ---- IFRAME ---- */
+    /* Animaciones cuadraditos */
+    #square1 { left: 0; top: 0; animation: square1 2.4s infinite; }
+    #square2 { left: 0; top: var(--offset); animation: square2 2.4s infinite; }
+    #square3 { left: var(--offset); top: var(--offset); animation: square3 2.4s infinite; }
+    #square4 { left: calc(2 * var(--offset)); top: var(--offset); animation: square4 2.4s infinite; }
+    #square5 { left: calc(3 * var(--offset)); top: var(--offset); animation: square5 2.4s infinite; }
+
+    @keyframes square1 { 0%{top:0;} 50%{top:var(--offset);} 100%{top:var(--offset);} }
+    @keyframes square2 { 0%{top:var(--offset);} 50%{top:calc(2*var(--offset));} 100%{top:0;} }
+    @keyframes square3 { 0%{left:var(--offset);} 50%{left:calc(2*var(--offset));} 100%{left:var(--offset);} }
+    @keyframes square4 { 0%{top:var(--offset);} 50%{top:calc(2*var(--offset));} 100%{top:var(--offset);} }
+    @keyframes square5 { 0%{left:calc(3*var(--offset));} 50%{left:calc(2*var(--offset));} 100%{left:calc(3*var(--offset));} }
+
+    /* ---- IFRAME FULLSCREEN ---- */
     #iframeContainer {
       display: none;
-      margin-top: 20px;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: black;
+      z-index: 1500;
     }
 
-    iframe {
-      width: 95%;
-      height: 80vh;
+    #iframeContainer iframe {
+      width: 100%;
+      height: 100%;
       border: none;
+    }
+
+    .close-iframe {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 30px;
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+      z-index: 2000;
     }
 
     /* ---- MODAL TUTORIAL ---- */
@@ -125,7 +175,7 @@
     }
 
     .modal-content {
-      background: #222 url('https://wallpapercave.com/wp/wp1822722.jpg') center/cover;
+      background: rgba(100,100,100,0.9);
       padding: 20px;
       border-radius: 10px;
       max-width: 600px;
@@ -134,10 +184,7 @@
       color: white;
     }
 
-    .modal-content h2 {
-      margin-top: 0;
-    }
-
+    .modal-content h2 { margin-top: 0; }
     .close {
       position: absolute;
       top: 10px; right: 15px;
@@ -155,7 +202,7 @@
 </head>
 <body>
   <header>
-    <img src="images/minecraft_title.png" alt="Icono">
+    <img src="images/icono.png" alt="Icono">
     <h1>Servidor Minecraft</h1>
   </header>
 
@@ -178,6 +225,7 @@
 
   <!-- Iframe -->
   <div id="iframeContainer">
+    <span class="close-iframe" onclick="closeIframe()">✖</span>
     <iframe src="https://eaglercraft.q13x.com/1.8-wasm/" allow="clipboard-write; autoplay; fullscreen; microphone; camera; geolocation; encrypted-media; display-capture"></iframe>
   </div>
 
@@ -202,15 +250,19 @@
 
   <script>
     function joinServer() {
-      document.getElementById('loader').style.display = 'block';
+      document.getElementById('loader').style.display = 'flex';
       setTimeout(() => {
         document.getElementById('loader').style.display = 'none';
         document.getElementById('iframeContainer').style.display = 'block';
       }, 5000);
     }
 
+    function closeIframe() {
+      document.getElementById('iframeContainer').style.display = 'none';
+    }
+
     function openTutorial() {
-      document.getElementById('loader').style.display = 'block';
+      document.getElementById('loader').style.display = 'flex';
       setTimeout(() => {
         document.getElementById('loader').style.display = 'none';
         document.getElementById('tutorialModal').style.display = 'flex';
