@@ -1,177 +1,232 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Classroom</title>
-  <link rel="icon" href="https://ssl.gstatic.com/classroom/ic_product_classroom_96.png" />
-  <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <title>Servidor Minecraft</title>
+  <link rel="icon" type="image/png" href="images/icono.png">
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background-image: url('https://static.planetminecraft.com/files/image/minecraft/texture-pack/2024/308/17576286_xl.webp');
-      background-size: cover;
-      background-position: center;
       font-family: 'Minecraftia', sans-serif;
-      display: flex;
-      flex-direction: column;
+      background: url('https://wallpapercave.com/wp/wp2555440.png') center/cover no-repeat;
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 20px;
+    }
+
+    header img {
+      width: 100px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-shadow: 3px 3px 0px #000;
+    }
+
+    .buttons {
+      margin-top: 30px;
+    }
+
+    /* ---- BOTONES ---- */
+    button {
+      padding: 10px 40px;
+      font-size: 18px;
+      background-color: #333;
+      color: #fff;
+      text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    img.title {
-      width: 90%;
-      max-width: 500px;
-      margin-bottom: 40px;
-    }
-
-    .button {
-      padding: 20px 40px;
-      font-size: 20px;
-      margin: 15px;
-      background-image: url('images/grass.png');
-      background-size: cover;
-      color: white;
-      border: 4px solid #3c3c3c;
-      border-radius: 12px;
+      position: relative;
+      border: 0;
+      z-index: 1;
+      user-select: none;
       cursor: pointer;
-      text-shadow: 1px 1px #000;
-      transition: transform 0.2s ease, filter 0.2s ease;
-      font-family: 'Minecraftia', sans-serif;
-      font-smooth: never;
-      -webkit-font-smoothing: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: unset;
+      padding: .8rem 1.5rem;
+      text-decoration: none;
+      font-weight: 900;
+      transition: all 0.7s cubic-bezier(0,.8,.26,.99);
+      margin: 10px;
     }
 
-    .button:hover {
-      transform: scale(1.05);
-      filter: brightness(1.1);
+    button:before {
+      position: absolute;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      content: '';
+      transition: .7s cubic-bezier(0,.8,.26,.99);
+      z-index: -1;
+      background-color: #333!important;
+      box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 
+                  0 4px rgb(255 255 255 / 20%) inset, 
+                  -4px 0 rgb(255 255 255 / 20%) inset, 
+                  4px 0 rgb(0 0 0 / 50%) inset;
     }
 
-    #animation-overlay {
+    button:after {
+      position: absolute;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      content: '';
+      box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+      transition: .7s cubic-bezier(0,.8,.26,.99);
+    }
+
+    button:active {
+      transform: translateY(4px);
+    }
+
+    /* ---- LOADER ---- */
+    .loader {
+      display: none;
+      margin-top: 50px;
+    }
+    .loadingspinner div {
+      background: url('https://filterforge.com/filters/11635.jpg') center/cover;
+    }
+
+    /* ---- IFRAME ---- */
+    #iframeContainer {
+      display: none;
+      margin-top: 20px;
+    }
+
+    iframe {
+      width: 95%;
+      height: 80vh;
+      border: none;
+    }
+
+    /* ---- MODAL TUTORIAL ---- */
+    .modal {
+      display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(2px);
-      display: none;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      z-index: 1000;
     }
 
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 2s forwards;
+    .modal-content {
+      background: #222 url('https://wallpapercave.com/wp/wp1822722.jpg') center/cover;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: left;
+      position: relative;
+      color: white;
     }
 
-    .fade-out {
-      animation: fadeOut 2s forwards;
+    .modal-content h2 {
+      margin-top: 0;
     }
 
-    .zoom-slow {
-      animation: zoomInSlow 3s forwards;
+    .close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 22px;
+      cursor: pointer;
+      color: red;
+      font-weight: bold;
     }
 
-    .zoom-big {
-      animation: zoomBig 3s forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeOut {
-      to { opacity: 0; }
-    }
-
-    @keyframes zoomInSlow {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    @keyframes zoomBig {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    #logo1, #logo2 {
-      max-width: 90%;
+    .copy-btn {
+      background: green;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <img src="images/minecraft_title.png" alt="Minecraft Title" class="title" id="mainTitle">
+  <header>
+    <img src="images/icono.png" alt="Icono">
+    <h1>Servidor Minecraft</h1>
+  </header>
 
-  <button class="button" onclick="abrirTutorial()">Tutorial para unirse al server</button>
-  <button class="button" onclick="startAnimation()">Unirse</button>
+  <div class="buttons">
+    <button onclick="openTutorial()">Tutorial</button>
+    <button onclick="joinServer()">Unirse</button>
+  </div>
 
-  <div id="animation-overlay">
-    <img src="images/minecraft_title.png" id="logo1" class="fade-in zoom-slow">
-    <img src="images/merks.png" id="logo2" class="hidden">
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loadingspinner">
+      <div id="square1"></div>
+      <div id="square2"></div>
+      <div id="square3"></div>
+      <div id="square4"></div>
+      <div id="square5"></div>
+    </div>
+    <p>Cargando...</p>
+  </div>
+
+  <!-- Iframe -->
+  <div id="iframeContainer">
+    <iframe src="https://eaglercraft.q13x.com/1.8-wasm/" allow="clipboard-write; autoplay; fullscreen; microphone; camera; geolocation; encrypted-media; display-capture"></iframe>
+  </div>
+
+  <!-- Modal Tutorial -->
+  <div class="modal" id="tutorialModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeTutorial()">&times;</span>
+      <h2>Cómo unirse al servidor</h2>
+      <ol>
+        <li>Entra a la página del juego con <b>Unirse</b> de la página principal.</li>
+        <li>Escribe un nombre de usuario (no pongas tu nombre real).</li>
+        <li>Haz clic en <b>Multiplayer</b> y luego en <b>Direct Connect</b>.</li>
+        <li>Introduce esta IP del servidor:<br>
+          <code id="serverIP">wss://8bb1bc8a-d502-4b14-8fef-bfd918171994-00-j8fv6kgxhdsg.janeway.replit.dev/</code><br>
+          <button class="copy-btn" onclick="copyIP()">Copiar IP</button>
+        </li>
+        <li>Pulsa en <b>Join Server</b> y ¡a jugar! 🎮</li>
+      </ol>
+      <p>⚠️ Si salta error reinicia Multiplayer ⚠️</p>
+    </div>
   </div>
 
   <script>
-    function abrirTutorial() {
-      const nuevaPestana = window.open("about:blank", "_blank");
-      const contenido = `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Tutorial</title>
-            <style>body, html { margin: 0; padding: 0; height: 100%; }</style>
-          </head>
-          <body>
-            <iframe src="tutorial.html" style="border: none; width: 100vw; height: 100vh;"></iframe>
-          </body>
-        </html>
-      `;
-      nuevaPestana.document.open();
-      nuevaPestana.document.write(contenido);
-      nuevaPestana.document.close();
+    function joinServer() {
+      document.getElementById('loader').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('iframeContainer').style.display = 'block';
+      }, 5000);
     }
 
-    function startAnimation() {
-      document.querySelectorAll('.button, #mainTitle').forEach(el => el.style.display = 'none');
-
-      const overlay = document.getElementById("animation-overlay");
-      const logo1 = document.getElementById("logo1");
-      const logo2 = document.getElementById("logo2");
-
-      overlay.style.display = "flex";
-
-      // Paso 1: mostrar logo1 con animación
+    function openTutorial() {
+      document.getElementById('loader').style.display = 'block';
       setTimeout(() => {
-        logo1.classList.add("fade-out");
-      }, 9000);
-
-      // Paso 2: ocultar logo1 y mostrar logo2 con animación grande
-      setTimeout(() => {
-        logo1.style.display = "none";
-        logo2.classList.remove("hidden");
-        logo2.classList.add("fade-in", "zoom-big");
-      }, 7000);
-
-      // Paso 3: abrir el juego en una nueva pestaña
-      setTimeout(() => {
-        window.open("juego.html", "_blank");
-      }, 9900);
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('tutorialModal').style.display = 'flex';
+      }, 2000);
     }
 
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "º") {
-        window.location.href = "https://classroom.google.com/";
-      }
-    });
+    function closeTutorial() {
+      document.getElementById('tutorialModal').style.display = 'none';
+    }
+
+    function copyIP() {
+      const ip = document.getElementById("serverIP").innerText;
+      navigator.clipboard.writeText(ip).then(() => {
+        alert("IP copiada: " + ip);
+      });
+    }
   </script>
 </body>
 </html>
