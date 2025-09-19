@@ -16,9 +16,8 @@
       background: url('https://wallpapers.com/images/hd/minecraft-background-autm74sse3wd4obo.jpg') center/cover no-repeat fixed;
       text-align: center;
       overflow: hidden;
-      min-height: 100vh; /* 👈 garantiza que cubre toda la ventana */
+      min-height: 100vh;
     }
-
 
     header {
       padding: 20px;
@@ -58,12 +57,10 @@
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 1px;
-      white-space: unset;
-      padding: .8rem 1.5rem;
-      text-decoration: none;
       font-weight: 900;
-      transition: all 0.7s cubic-bezier(0,.8,.26,.99);
+      transition: all 0.3s ease-in-out;
       width: 250px;
+      border-radius: 8px;
     }
 
     button:before {
@@ -75,13 +72,24 @@
       width: 100%;
       height: 100%;
       content: '';
-      transition: .7s cubic-bezier(0,.8,.26,.99);
+      transition: .3s ease-in-out;
       z-index: -1;
       background-color: #333!important;
       box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 
                   0 4px rgb(255 255 255 / 20%) inset, 
                   -4px 0 rgb(255 255 255 / 20%) inset, 
                   4px 0 rgb(0 0 0 / 50%) inset;
+      border-radius: 8px;
+    }
+
+    button:hover, button:focus {
+      background-color: #555;
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    button:active {
+      transform: scale(0.97) translateY(2px);
     }
 
     button:after {
@@ -94,11 +102,8 @@
       height: 100%;
       content: '';
       box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-      transition: .7s cubic-bezier(0,.8,.26,.99);
-    }
-
-    button:active {
-      transform: translateY(4px);
+      transition: .3s ease-in-out;
+      border-radius: 8px;
     }
 
     /* ---- LOADER ---- */
@@ -200,9 +205,20 @@
       font-weight: bold;
     }
 
+    /* ---- BOTÓN COPIAR MÁS PEQUEÑO ---- */
     .copy-btn {
       background: green;
+      font-size: 14px;
+      padding: .5rem 1rem;
+      width: auto;
       margin-top: 10px;
+      border-radius: 6px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .copy-btn:hover, .copy-btn:focus {
+      background: #28a745;
+      transform: scale(1.1);
     }
   </style>
 </head>
