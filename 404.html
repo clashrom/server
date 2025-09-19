@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Servidor Minecraft</title>
+  <link rel="icon" type="image/png" href="images/icono.png">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Minecraftia', sans-serif;
+      background: url('https://wallpapers.com/images/hd/minecraft-background-autm74sse3wd4obo.jpg') center/cover no-repeat fixed;
+      text-align: center;
+      overflow: hidden;
+      min-height: 100vh; /* 👈 garantiza que cubre toda la ventana */
+    }
+
+
+    header {
+      padding: 20px;
+    }
+
+    header img {
+      width: 1000px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-shadow: 3px 3px 0px #000;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* ---- BOTONES ---- */
+    button {
+      padding: 10px 40px;
+      font-size: 18px;
+      background-color: #333;
+      color: #fff;
+      text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 0;
+      z-index: 1;
+      user-select: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: unset;
+      padding: .8rem 1.5rem;
+      text-decoration: none;
+      font-weight: 900;
+      transition: all 0.7s cubic-bezier(0,.8,.26,.99);
+      width: 250px;
+    }
+
+    button:before {
+      position: absolute;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      content: '';
+      transition: .7s cubic-bezier(0,.8,.26,.99);
+      z-index: -1;
+      background-color: #333!important;
+      box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 
+                  0 4px rgb(255 255 255 / 20%) inset, 
+                  -4px 0 rgb(255 255 255 / 20%) inset, 
+                  4px 0 rgb(0 0 0 / 50%) inset;
+    }
+
+    button:after {
+      position: absolute;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      content: '';
+      box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+      transition: .7s cubic-bezier(0,.8,.26,.99);
+    }
+
+    button:active {
+      transform: translateY(4px);
+    }
+
+    /* ---- LOADER ---- */
+    .loader {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .loadingspinner {
+      --square: 40px;
+      --offset: 45px;
+      width: calc( 3 * var(--offset) + var(--square));
+      height: calc( 2 * var(--offset) + var(--square));
+      position: relative;
+    }
+    .loadingspinner div {
+      background: url('https://filterforge.com/filters/11635.jpg') center/cover;
+      border-radius: 4px;
+      width: var(--square);
+      height: var(--square);
+      position: absolute;
+    }
+
+    /* Animaciones cuadraditos */
+    #square1 { left: 0; top: 0; animation: square1 2.4s infinite; }
+    #square2 { left: 0; top: var(--offset); animation: square2 2.4s infinite; }
+    #square3 { left: var(--offset); top: var(--offset); animation: square3 2.4s infinite; }
+    #square4 { left: calc(2 * var(--offset)); top: var(--offset); animation: square4 2.4s infinite; }
+    #square5 { left: calc(3 * var(--offset)); top: var(--offset); animation: square5 2.4s infinite; }
+
+    @keyframes square1 { 0%{top:0;} 50%{top:var(--offset);} 100%{top:var(--offset);} }
+    @keyframes square2 { 0%{top:var(--offset);} 50%{top:calc(2*var(--offset));} 100%{top:0;} }
+    @keyframes square3 { 0%{left:var(--offset);} 50%{left:calc(2*var(--offset));} 100%{left:var(--offset);} }
+    @keyframes square4 { 0%{top:var(--offset);} 50%{top:calc(2*var(--offset));} 100%{top:var(--offset);} }
+    @keyframes square5 { 0%{left:calc(3*var(--offset));} 50%{left:calc(2*var(--offset));} 100%{left:calc(3*var(--offset));} }
+
+    /* ---- IFRAME FULLSCREEN ---- */
+    #iframeContainer {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: blue;
+      z-index: 1500;
+    }
+
+    #iframeContainer iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .close-iframe {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 30px;
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+      z-index: 2000;
+    }
+
+    /* ---- MODAL TUTORIAL ---- */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: rgba(100,100,100,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: left;
+      position: relative;
+      color: white;
+    }
+
+    .modal-content h2 { margin-top: 0; }
+    .close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 22px;
+      cursor: pointer;
+      color: red;
+      font-weight: bold;
+    }
+
+    .copy-btn {
+      background: green;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="images/minecraft_title.png" alt="Icono">
+  </header>
+
+  <div class="buttons">
+    <button onclick="openTutorial()">Tutorial</button>
+    <button onclick="joinServer()">Unirse</button>
+  </div>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loadingspinner">
+      <div id="square1"></div>
+      <div id="square2"></div>
+      <div id="square3"></div>
+      <div id="square4"></div>
+      <div id="square5"></div>
+    </div>
+    <p>Cargando...</p>
+  </div>
+
+  <!-- Iframe -->
+  <div id="iframeContainer">
+    <span class="close-iframe" onclick="closeIframe()">✖</span>
+    <iframe src="https://eaglercraft.q13x.com/1.8-wasm/" allow="clipboard-write; autoplay; fullscreen; microphone; camera; geolocation; encrypted-media; display-capture"></iframe>
+  </div>
+
+  <!-- Modal Tutorial -->
+  <div class="modal" id="tutorialModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeTutorial()">&times;</span>
+      <h2>Cómo unirse al servidor</h2>
+      <ol>
+        <li>Entra a la página del juego con <b>Unirse</b> de la página principal.</li>
+        <li>Escribe un nombre de usuario (no pongas tu nombre real).</li>
+        <li>Haz clic en <b>Multiplayer</b> y luego en <b>Direct Connect</b>.</li>
+        <li>Introduce esta IP del servidor:<br>
+          <code id="serverIP">wss://8bb1bc8a-d502-4b14-8fef-bfd918171994-00-j8fv6kgxhdsg.janeway.replit.dev/</code><br>
+          <button class="copy-btn" onclick="copyIP()">Copiar IP</button>
+        </li>
+        <li>Pulsa en <b>Join Server</b> y ¡a jugar! 🎮</li>
+      </ol>
+      <p>⚠️ Si salta error reinicia Multiplayer ⚠️</p>
+    </div>
+  </div>
+
+  <script>
+    function joinServer() {
+      document.getElementById('loader').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('iframeContainer').style.display = 'block';
+      }, 5000);
+    }
+
+    function closeIframe() {
+      document.getElementById('iframeContainer').style.display = 'none';
+    }
+
+    function openTutorial() {
+      document.getElementById('loader').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('tutorialModal').style.display = 'flex';
+      }, 2000);
+    }
+
+    function closeTutorial() {
+      document.getElementById('tutorialModal').style.display = 'none';
+    }
+
+    function copyIP() {
+      const ip = document.getElementById("serverIP").innerText;
+      navigator.clipboard.writeText(ip).then(() => {
+        alert("IP copiada: " + ip);
+      });
+    }
+  </script>
+</body>
+</html>
