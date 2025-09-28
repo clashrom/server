@@ -147,7 +147,7 @@
     @keyframes square5 { 0%{left:calc(3*var(--offset));} 50%{left:calc(2*var(--offset));} 100%{left:calc(3*var(--offset));} }
 
     /* ---- IFRAME FULLSCREEN ---- */
-    #iframeContainer {
+    #iframeContainer, #formIframeContainer {
       display: none;
       position: fixed;
       top: 0; left: 0;
@@ -156,13 +156,14 @@
       z-index: 1500;
     }
 
-    #iframeContainer iframe {
+    #iframeContainer iframe,
+    #formIframeContainer iframe {
       width: 100%;
       height: 100%;
       border: none;
     }
 
-    .close-iframe {
+    .close-iframe, .close-form-iframe {
       position: absolute;
       top: 10px;
       right: 20px;
@@ -228,6 +229,7 @@
   </header>
 
   <div class="buttons">
+    <button onclick="openForm()">Cuestionario</button>
     <button onclick="openTutorial()">Tutorial</button>
     <button onclick="joinServer()">Unirse</button>
   </div>
@@ -244,10 +246,16 @@
     <p>Cargando...</p>
   </div>
 
-  <!-- Iframe -->
+  <!-- Iframe Minecraft -->
   <div id="iframeContainer">
     <span class="close-iframe" onclick="closeIframe()">✖</span>
     <iframe src="https://eaglercraft.q13x.com/1.8-wasm/" allow="clipboard-write; autoplay; fullscreen; microphone; camera; geolocation; encrypted-media; display-capture"></iframe>
+  </div>
+
+  <!-- Iframe Formulario -->
+  <div id="formIframeContainer">
+    <span class="close-form-iframe" onclick="closeFormIframe()">✖</span>
+    <iframe src="https://forms.gle/T3wnusSFCTAVJvas8"></iframe>
   </div>
 
   <!-- Modal Tutorial -->
@@ -256,7 +264,8 @@
       <span class="close" onclick="closeTutorial()">&times;</span>
       <h2>Cómo unirse al servidor</h2>
       <ol>
-        <li>Entra a la página del juego con <b>Unirse</b> de la página principal.</li>
+        <li>Primero, rellena el <b>Cuestionario</b> (botón arriba) para poder acceder al servidor.</li>
+        <li>Cuando hayas completado el formulario, entra a la página del juego con <b>Unirse</b> de la página principal.</li>
         <li>Escribe un nombre de usuario (no pongas tu nombre real).</li>
         <li>Haz clic en <b>Multiplayer</b> y luego en <b>Direct Connect</b>.</li>
         <li>Introduce esta IP del servidor:<br>
@@ -299,6 +308,18 @@
       navigator.clipboard.writeText(ip).then(() => {
         alert("IP copiada: " + ip);
       });
+    }
+
+    function openForm() {
+      document.getElementById('loader').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('formIframeContainer').style.display = 'block';
+      }, 2000);
+    }
+
+    function closeFormIframe() {
+      document.getElementById('formIframeContainer').style.display = 'none';
     }
   </script>
 </body>
